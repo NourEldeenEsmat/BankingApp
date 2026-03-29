@@ -21,7 +21,7 @@ public class CORSFilter extends OncePerRequestFilter {
 
         // Allow only specific origins
         if ("http://localhost:4200".equals(originHeader) ||
-                "https://noureldeenesmat.github.io/BankingApp/".equals(originHeader)) {
+                "https://noureldeenesmat.github.io".equals(originHeader)) {
             response.setHeader("Access-Control-Allow-Origin", originHeader);
         }
 
