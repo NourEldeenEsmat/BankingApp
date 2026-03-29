@@ -1,5 +1,5 @@
 # استخدم Java image جاهزة
-FROM eclipse-temurin:17.0.18_8-jdk-ubi10-minimal
+FROM eclipse-temurin:8u482-b08-jre-ubi10-minimal
 
 # حدد مكان العمل داخل الكونتينر
 WORKDIR /app
