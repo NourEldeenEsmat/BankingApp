@@ -1,6 +1,5 @@
 # استخدم Java image جاهزة
-FROM eclipse-temurin:17-jdk-slim
-
+FROM eclipse-temurin:17-jdk
 
 # حدد مكان العمل داخل الكونتينر
 WORKDIR /app
