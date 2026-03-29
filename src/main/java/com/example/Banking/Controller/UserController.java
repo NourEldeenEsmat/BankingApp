@@ -16,7 +16,7 @@ import tools.jackson.core.JacksonException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("localhost/4200","https://noureldeenesmat.github.io")
+@CrossOrigin("localhost/4200")
 @RequestMapping("/api/users")
 public class UserController {
 
