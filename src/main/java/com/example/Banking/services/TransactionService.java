@@ -28,6 +28,7 @@ public class TransactionService {
     private LedgerRepository ledgerRepo;
 
     private final Random random = new Random();
+
     public Page<TransactionDTO> getTransactions(Pageable pageable, String accountId, String type, String search) {
 
         boolean hasAccountId = accountId != null && !accountId.isEmpty();
@@ -66,23 +67,28 @@ public class TransactionService {
                         type, accountId, type, accountId, pageable)
                 .map(TransactionMapper::toDTO);
     }
+
     @Transactional
     public TransactionDTO transfer(Long fromAccountId, Long toAccountId, Double amount) {
-        if (amount<1){
+        if (amount < 1) {
             throw new RuntimeException("Please Enter Valued Amount");
         }
 
-        if(fromAccountId.equals(toAccountId))
+        if (fromAccountId.equals(toAccountId))
             throw new RuntimeException("Cannot transfer to the same account");
 
         Account from = accountRepo.findByAccountNumber(fromAccountId.toString());
         Account to = accountRepo.findByAccountNumber(toAccountId.toString());
 
-        if(from.getAccountType()==AccountType.FIXED||from.getAccountType()==AccountType.SAVINGS){
-            throw new RuntimeException("You Cant transfer from "+from.getAccountType()+" Account");
+        if (from.getAccountType() == AccountType.FIXED || from.getAccountType() == AccountType.SAVINGS) {
+            throw new RuntimeException("You Cant transfer from " + from.getAccountType() + " Account");
         }
 
-        if(from.getBalance() < amount)
+        if (to.getAccountType() == AccountType.FIXED) {
+            throw new RuntimeException("You Cant transfer to " + to.getAccountType() + " Account");
+        }
+
+        if (from.getBalance() < amount)
             throw new RuntimeException("Insufficient balance");
 
         from.setBalance(from.getBalance() - amount);
@@ -115,14 +121,15 @@ public class TransactionService {
 
         return TransactionMapper.toDTO(tx);
     }
+
     @Transactional
     public TransactionDTO deposit(Long accountId, Double amount) {
-        if (amount<1){
+        if (amount < 1) {
             throw new RuntimeException("Please Enter Valued Amount");
         }
         Account account = accountRepo.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        if(account.getAccountType()== AccountType.FIXED&&amount<10000){
+        if (account.getAccountType() == AccountType.FIXED && amount < 10000) {
             throw new RuntimeException("You Cant Add less than 10000 in fixed account");
         }
         // تحديث الرصيد
@@ -152,7 +159,7 @@ public class TransactionService {
     @Transactional
     public TransactionDTO withdraw(Long accountId, Double amount) {
 
-        if (amount<1){
+        if (amount < 1) {
             throw new RuntimeException("Please Enter Valued Amount");
         }
         Account account = accountRepo.findById(accountId)
